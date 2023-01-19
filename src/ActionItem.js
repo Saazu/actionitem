@@ -21,7 +21,9 @@ function ActionItem({
 
   function saveActionItem() {
     setActionState("saved");
-    saveActionHandler(id, titleValue, descriptionValue);
+    setTitleValue(titleValue.trim());
+    setDescriptionValue(descriptionValue.trim());
+    saveActionHandler(id, titleValue.trim(), descriptionValue.trim());
   }
 
   function cancel() {
@@ -58,7 +60,7 @@ function ActionItem({
   }
 
   return (
-    <div className="card">
+    <div className={actionState === "archived" ? "archived-card" : "card"}>
       {/**Inputs */}
       <div className="input-group">
         <input
@@ -92,14 +94,18 @@ function ActionItem({
             <button
               name="cancel"
               onClick={cancel}
-              disabled={titleValue === "" && descriptionValue === ""}
+              disabled={
+                titleValue.trim() === "" && descriptionValue.trim() === ""
+              }
             >
               Cancel
             </button>
             <button
               name="save"
               onClick={saveActionItem}
-              disabled={titleValue === "" || descriptionValue === ""}
+              disabled={
+                titleValue.trim() === "" || descriptionValue.trim() === ""
+              }
             >
               Save
             </button>
