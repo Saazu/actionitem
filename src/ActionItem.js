@@ -21,9 +21,12 @@ function ActionItem({
 
   function saveActionItem() {
     setActionState("saved");
-    setTitleValue(titleValue.trim());
-    setDescriptionValue(descriptionValue.trim());
-    saveActionHandler(id, titleValue.trim(), descriptionValue.trim());
+    const titleToSave = titleValue.trim();
+    const descriptionToSave = descriptionValue.trim();
+
+    setTitleValue(titleToSave);
+    setDescriptionValue(descriptionToSave);
+    saveActionHandler(id, titleToSave, descriptionToSave);
   }
 
   function cancel() {
@@ -61,7 +64,6 @@ function ActionItem({
 
   return (
     <div className={actionState === "archived" ? "archived-card" : "card"}>
-      {/**Inputs */}
       <div className="input-group">
         <input
           name="title"
@@ -87,7 +89,6 @@ function ActionItem({
         />
       </div>
 
-      {/**Action buttons */}
       <div className="button-group">
         {actionState === "editing" && (
           <>
