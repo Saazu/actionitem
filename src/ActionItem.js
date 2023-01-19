@@ -23,16 +23,15 @@ function ActionItem({
     setActionItemState("saved");
     const titleToSave = titleValue.trim();
     const descriptionToSave = descriptionValue.trim();
-
     setTitleValue(titleToSave);
     setDescriptionValue(descriptionToSave);
     saveActionHandler(id, titleToSave, descriptionToSave);
   }
 
   function cancel() {
+    setActionItemState("saved");
     titleInputRef.current.blur();
     descriptionInputRef.current.blur();
-    setActionItemState("saved");
     setTitleValue(previousValues.title);
     setDescriptionValue(previousValues.description);
   }
