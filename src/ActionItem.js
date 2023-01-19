@@ -11,7 +11,7 @@ function ActionItem({
   unArchiveActionHandler,
 }) {
   const initialActionItemState = title !== "" ? "saved" : "editing";
-  const [actionState, setActionState] = useState(initialActionItemState); // States are: editing, saved, archived
+  const [actionItemState, setActionItemState] = useState(initialActionItemState); // States are: editing, saved, archived
   const [titleValue, setTitleValue] = useState(title);
   const [descriptionValue, setDescriptionValue] = useState(description);
   const [previousValues, setPreviousValues] = useState({ title, description });
@@ -20,7 +20,7 @@ function ActionItem({
   const descriptionInputRef = useRef(null);
 
   function saveActionItem() {
-    setActionState("saved");
+    setActionItemState("saved");
     const titleToSave = titleValue.trim();
     const descriptionToSave = descriptionValue.trim();
 
@@ -32,24 +32,24 @@ function ActionItem({
   function cancel() {
     titleInputRef.current.blur();
     descriptionInputRef.current.blur();
-    setActionState("saved");
+    setActionItemState("saved");
     setTitleValue(previousValues.title);
     setDescriptionValue(previousValues.description);
   }
 
   function archive() {
-    setActionState("archived");
+    setActionItemState("archived");
     archiveActionHandler(id);
   }
 
   function unarchive() {
-    setActionState("saved");
+    setActionItemState("saved");
     unArchiveActionHandler(id);
   }
 
   function handleInputFocus() {
-    setActionState("editing");
-    if (actionState !== "editing") {
+    setActionItemState("editing");
+    if (actionItemState !== "editing") {
       setPreviousValues({ title: titleValue, description: descriptionValue });
     }
   }
@@ -63,7 +63,7 @@ function ActionItem({
   }
 
   return (
-    <div className={actionState === "archived" ? "archived-card" : "card"}>
+    <div className={actionItemState === "archived" ? "archived-card" : "card"}>
       <div className="input-group">
         <input
           name="title"
@@ -72,7 +72,7 @@ function ActionItem({
           className="title"
           placeholder="Add Title"
           ref={titleInputRef}
-          disabled={actionState === "archived"}
+          disabled={actionItemState === "archived"}
           onFocus={handleInputFocus}
           onChange={handleTitleChange}
         />
@@ -83,41 +83,37 @@ function ActionItem({
           ref={descriptionInputRef}
           value={descriptionValue}
           className="description"
-          disabled={actionState === "archived"}
+          disabled={actionItemState === "archived"}
           onFocus={handleInputFocus}
           onChange={handleDescriptionChange}
         />
       </div>
 
       <div className="button-group">
-        {actionState === "editing" && (
+        {actionItemState === "editing" && (
           <>
             <button
               name="cancel"
               onClick={cancel}
-              disabled={
-                titleValue.trim() === "" && descriptionValue.trim() === ""
-              }
+              disabled={titleValue.trim() === "" && descriptionValue.trim() === ""}
             >
               Cancel
             </button>
             <button
               name="save"
               onClick={saveActionItem}
-              disabled={
-                titleValue.trim() === "" || descriptionValue.trim() === ""
-              }
+              disabled={titleValue.trim() === "" || descriptionValue.trim() === ""}
             >
               Save
             </button>
           </>
         )}
-        {actionState === "saved" && (
+        {actionItemState === "saved" && (
           <button name="archive" onClick={archive}>
             Archive
           </button>
         )}
-        {actionState === "archived" && (
+        {actionItemState === "archived" && (
           <button name="unarchive" onClick={unarchive}>
             Unarchive
           </button>
