@@ -78,10 +78,10 @@ function ActionItem({
         <input
           name="description"
           type="text"
-          placeholder="Add Description"
-          ref={descriptionInputRef}
           value={descriptionValue}
           className="description"
+          placeholder="Add Description"
+          ref={descriptionInputRef}
           disabled={actionItemState === "archived"}
           onFocus={handleInputFocus}
           onChange={handleDescriptionChange}
