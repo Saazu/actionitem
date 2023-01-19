@@ -44,7 +44,9 @@ function ActionItem({
 
   function handleInputFocus() {
     setActionState("editing");
-    setPreviousValues({ title, description });
+    if (actionState !== "editing") {
+      setPreviousValues({ title: titleValue, description: descriptionValue });
+    }
   }
 
   function handleTitleChange(event) {
