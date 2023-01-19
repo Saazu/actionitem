@@ -47,8 +47,8 @@ function ActionItem({
   }
 
   function handleInputFocus() {
-    setActionItemState("editing");
     if (actionItemState !== "editing") {
+      setActionItemState("editing");
       setPreviousValues({ title: titleValue, description: descriptionValue });
     }
   }
