@@ -2,21 +2,29 @@ import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import "./actionitem.css";
 
-function ActionItem({ title, description }) {
+function ActionItem({ title, description, saveActionHandler }) {
   const [actionState, setActionState] = useState("editing"); // editing, saved, archived
+  const [titleValue, setTitleValue] = useState(title);
+  const [descriptionValue, setDescriptionValue] = useState(description);
+  const [previousValues, setPreviousValues] = useState({ title, description });
 
   const titleInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
 
   function saveActionItem() {
-    console.log("saved");
+    if (title === "" || description === "") {
+      return;
+    }
     setActionState("saved");
+    saveActionHandler();
   }
 
   function cancel() {
     titleInputRef.current.blur();
     descriptionInputRef.current.blur();
     setActionState("saved");
+    setTitleValue(previousValues.title);
+    setDescriptionValue(previousValues.description);
   }
 
   function archive() {
@@ -29,6 +37,15 @@ function ActionItem({ title, description }) {
 
   function handleInputFocus() {
     setActionState("editing");
+    setPreviousValues({ title, description });
+  }
+
+  function handleTitleChange(event) {
+    setTitleValue(event.currentTarget.value);
+  }
+
+  function handleDescriptionChange(event) {
+    setDescriptionValue(event.currentTarget.value);
   }
 
   return (
@@ -38,20 +55,24 @@ function ActionItem({ title, description }) {
         <input
           name="title"
           type="text"
-          value={title}
+          value={titleValue}
           className="title"
+          placeholder="Add Title"
           ref={titleInputRef}
           disabled={actionState === "archived"}
           onFocus={handleInputFocus}
+          onChange={handleTitleChange}
         />
         <input
-          ref={descriptionInputRef}
           name="description"
           type="text"
-          value={description}
+          placeholder="Add Description"
+          ref={descriptionInputRef}
+          value={descriptionValue}
           className="description"
           disabled={actionState === "archived"}
           onFocus={handleInputFocus}
+          onChange={handleDescriptionChange}
         />
       </div>
 
@@ -59,27 +80,31 @@ function ActionItem({ title, description }) {
       <div className="button-group">
         {actionState === "editing" && (
           <>
-            <button name="cancel" onClick={cancel}>
+            <button
+              name="cancel"
+              onClick={cancel}
+              disabled={titleValue === "" && descriptionValue === ""}
+            >
               Cancel
             </button>
-            <button name="save" onClick={saveActionItem}>
+            <button
+              name="save"
+              onClick={saveActionItem}
+              disabled={titleValue === "" || descriptionValue === ""}
+            >
               Save
             </button>
           </>
         )}
         {actionState === "saved" && (
-          <>
-            <button name="archive" onClick={archive}>
-              Archive
-            </button>
-          </>
+          <button name="archive" onClick={archive}>
+            Archive
+          </button>
         )}
         {actionState === "archived" && (
-          <>
-            <button name="unarchive" onClick={unarchive}>
-              Unarchive
-            </button>
-          </>
+          <button name="unarchive" onClick={unarchive}>
+            Unarchive
+          </button>
         )}
       </div>
     </div>

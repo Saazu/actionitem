@@ -4,8 +4,9 @@ function App() {
   return (
     <div style={{ padding: "1rem" }}>
       <ActionItem
-        title="Action Item Title"
-        description="Action Item Description"
+        title="Delta"
+        description="This is the force we know"
+        saveActionHandler={() => console.log("Saved")}
       />
     </div>
   );
