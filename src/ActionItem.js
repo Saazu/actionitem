@@ -2,8 +2,16 @@ import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import "./actionitem.css";
 
-function ActionItem({ title, description, saveActionHandler }) {
-  const [actionState, setActionState] = useState("editing"); // editing, saved, archived
+function ActionItem({
+  id,
+  title,
+  description,
+  saveActionHandler,
+  archiveActionHandler,
+  unArchiveActionHandler,
+}) {
+  const initialActionItemState = title !== "" ? "saved" : "editing";
+  const [actionState, setActionState] = useState(initialActionItemState); // States are: editing, saved, archived
   const [titleValue, setTitleValue] = useState(title);
   const [descriptionValue, setDescriptionValue] = useState(description);
   const [previousValues, setPreviousValues] = useState({ title, description });
@@ -12,11 +20,8 @@ function ActionItem({ title, description, saveActionHandler }) {
   const descriptionInputRef = useRef(null);
 
   function saveActionItem() {
-    if (title === "" || description === "") {
-      return;
-    }
     setActionState("saved");
-    saveActionHandler();
+    saveActionHandler(id, titleValue, descriptionValue);
   }
 
   function cancel() {
@@ -29,10 +34,12 @@ function ActionItem({ title, description, saveActionHandler }) {
 
   function archive() {
     setActionState("archived");
+    archiveActionHandler(id);
   }
 
   function unarchive() {
     setActionState("saved");
+    unArchiveActionHandler(id);
   }
 
   function handleInputFocus() {
@@ -112,8 +119,11 @@ function ActionItem({ title, description, saveActionHandler }) {
 }
 
 ActionItem.propTypes = {
-  text: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  saveActionHandler: PropTypes.func.isRequired,
+  archiveActionHandler: PropTypes.func.isRequired,
+  unArchiveActionHandler: PropTypes.func.isRequired,
 };
 
 export default ActionItem;
